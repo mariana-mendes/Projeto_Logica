@@ -7,12 +7,16 @@ sig Equipe {
 
 abstract sig Aluno {}
 
-sig Desenvolvedor extends Aluno  {}
-sig Testador extends Aluno {}
+sig Desenvolvedor extends Equipe  {}
+sig Testador extends Equipe {}
 
 fact {
 	all e:Equipe| some e.alunos
-	#Equipe = 3
+	#Desenvolvedor = 2
+	#Testador = 1
+
+
+	// para todo aluno, ele está contido em apenas um set de alunos
 	all e:Aluno{
 		one e.~alunos
 	}
@@ -31,4 +35,5 @@ sig Entregue in Programa{}
 
 pred show[]{
 }
-run show for 3
+run show for 9
+
