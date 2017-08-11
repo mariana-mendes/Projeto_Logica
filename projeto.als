@@ -1,30 +1,30 @@
 module sistema
 
 
-sig Equipe {
-	alunos: set Aluno
+abstract sig Equipe {
+	alunos: some Aluno
 }
 
-abstract sig Aluno {}
+sig Aluno {}
 
-sig Desenvolvedor extends Equipe  {}
-sig Testador extends Equipe {}
+sig Desenvolvedores extends Equipe  {}
+
+sig Testadores extends Equipe {}
 
 fact {
-	all e:Equipe| some e.alunos
-	#Desenvolvedor = 2
-	#Testador = 1
-
-
-	// para todo aluno, ele está contido em apenas um set de alunos
-	all e:Aluno{
-		one e.~alunos
-	}
+	// Um aluno está contido em um único set de alunos
+	all a:Aluno | one a.~alunos
 }
 
+
+fact{
+	#Desenvolvedores = 2
+	#Testadores = 1
+
+
+}
 --- Programa que está sendo desenvolvido possui 4 estados diferentes.
 sig Programa {}
-
 sig Desenvolvimento in Programa{}
 sig Testando in Programa{}
 sig Integrado in Programa{}
