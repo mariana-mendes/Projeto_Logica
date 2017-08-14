@@ -1,37 +1,55 @@
 module sistema
 
 
-abstract sig Equipe {
-	alunos: some Aluno
+abstract sig  Equipe{}
+
+sig Desenvolvedores extends Equipe{}
+sig Testadores extends Equipe{}
+
+abstract sig PartePrograma{
+	equipe: lone Equipe
 }
 
-sig Aluno {}
-
-sig Desenvolvedores extends Equipe  {}
-
-sig Testadores extends Equipe {}
-
-fact {
-	// Um aluno está contido em um único set de alunos
-	all a:Aluno | one a.~alunos
+sig Programa {
+	partes: some PartePrograma
 }
-
 
 fact{
+	all p:PartePrograma | one p.~partes
+	all p:PartePrograma | p in (Desenvolvimento + Desenvolvido + Testando + Testado + Integrado +  Entregue)
+}
+
+
+--- Um unico programa está sendo desenvolvido 
+fact{
+	#Programa = 1
 	#Desenvolvedores = 2
 	#Testadores = 1
 
+}
+
+fact{
+	all p:PartePrograma | p in Testando => (p in Desenvolvido and  p not in (Desenvolvimento + Testado + Integrado + Entregue))
+	all p:PartePrograma | p in Desenvolvimento => (p not in (Desenvolvido + Testando + Testado + Integrado + Entregue))
+	
+}
+
+
+-- Se a parte estiver sendo desenvolvida por alguma equipe e 
+
+fact{
+	all p:PartePrograma |  #p.equipe = 1 <=> ( (p.equipe in Testadores <=> p in Testando) and (p.equipe in Desenvolvedores <=> p in Desenvolvimento))
+
 
 }
---- Programa que está sendo desenvolvido possui 4 estados diferentes.
-sig Programa {}
-sig Desenvolvimento in Programa{}
-sig Testando in Programa{}
-sig Integrado in Programa{}
-sig Entregue in Programa{}
 
-
-
+--- Estados que as partes do programa podem estar 
+sig Desenvolvimento in PartePrograma{}
+sig Desenvolvido in PartePrograma{}
+sig Testando in PartePrograma{}
+sig Testado in PartePrograma{}
+sig Integrado in PartePrograma{}
+sig Entregue in PartePrograma{}
 
 pred show[]{
 }
