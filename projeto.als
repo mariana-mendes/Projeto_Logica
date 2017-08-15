@@ -29,9 +29,19 @@ fact{
 }
 
 fact{
-	all p:PartePrograma | p in Testando => (p in Desenvolvido and  p not in (Desenvolvimento + Testado + Integrado + Entregue))
-	all p:PartePrograma | p in Desenvolvimento => (p not in (Desenvolvido + Testando + Testado + Integrado + Entregue))
+	all p:PartePrograma | p in Testando => (p in Desenvolvido and  p not in (naoTestando))
+	all p:PartePrograma | p in Desenvolvimento => (p not in (naoDesenvolvendo))
 	
+}
+
+/*Funcoes que retornam um conjunto de estados das partes do programa */
+fun naoTestando: set PartePrograma{
+	(Desenvolvimento + Testado + Integrado + Entregue)
+	
+}
+
+fun naoDesenvolvendo: set PartePrograma{
+	(Desenvolvido + Testando + Testado + Integrado + Entregue)
 }
 
 
