@@ -60,7 +60,20 @@ sig Testado in PartePrograma{}
 sig Integrado in PartePrograma{}
 sig Entregue in PartePrograma{}
 
+pred nehumaParteEntregue[p:PartePrograma]{
+	#p.equipe >= 1
+}
+
+pred parteSendoTestada[p:Testando]{
+	some p
+}
+
+pred ProgramaCom3Partes[p:Programa]{
+	 #p.partes = 3
+}
+
 pred show[]{
 }
+
 run show for 9
 
