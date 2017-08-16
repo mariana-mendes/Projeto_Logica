@@ -72,6 +72,7 @@ sig Desenvolvimento in PartePrograma{
 		equipe: one Desenvolvedores
 }
 sig Desenvolvido in PartePrograma{
+		equipe2: lone Testadores
 }
 sig Testando in PartePrograma{
 		equipe3: one Testadores}
