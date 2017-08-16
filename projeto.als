@@ -72,6 +72,36 @@ pred ProgramaCom3Partes[p:Programa]{
 	 #p.partes = 3
 }
 
+assert ProgramaComNpartes{
+		all p:PartePrograma | one p.~partes
+}
+
+assert QuantidadeEquipe{
+		#Programa = 1
+		#Desenvolvedores = 2
+		#Testadores = 1
+}
+
+assert ProgramaEmDesenvolvimento{
+		all p:PartePrograma | p in Desenvolvimento => (p not in (naoDesenvolvendo))
+}
+assert ProgramaEmTeste{
+		all p:PartePrograma | p in Testando => (p in Desenvolvido and  p not in (naoTestando))
+}
+assert ProgramaIntegrado{
+		all p:PartePrograma | p in Integrado => (p not in (naoIntegrado) and p in (desenvolvidoETestado))
+}
+assert ProgramaEntregue{
+		all p:PartePrograma | p in Entregue => (p not in(naoEntregue) and p in (prontoParaEntrega))
+}
+
+check ProgramaEntregue
+check ProgramaIntegrado
+check ProgramaEmTeste
+check ProgramaEmDesenvolvimento
+check QuantidadeEquipe
+check ProgramaComNpartes
+
 pred show[]{
 }
 
