@@ -35,49 +35,28 @@ fact{
 }
 
 /*Funcoes que retornam um conjunto de estados das partes do programa */
-fun naoTestando: set PartePrograma{
-	(Desenvolvimento + Testado + Integrado + Entregue)
-	
-}
+fun naoTestando: set PartePrograma{   	(Desenvolvimento + Testado + Integrado + Entregue)   }
 
-fun naoDesenvolvendo: set PartePrograma{
-	(Desenvolvido + Testando + Testado + Integrado + Entregue)
-}
+fun naoDesenvolvendo: set PartePrograma{ 	(Desenvolvido + Testando + Testado + Integrado + Entregue)  }
 
-fun desenvolvidoETestado: set PartePrograma {
-	(Desenvolvido & Testado)
-}
+fun desenvolvidoETestado: set PartePrograma {  (Desenvolvido & Testado)  } 
 
-fun prontoParaEntrega: set PartePrograma {
-	(Desenvolvido & Testado & Integrado)
-}
+fun prontoParaEntrega: set PartePrograma {	(Desenvolvido & Testado & Integrado)   }
 
-fun naoIntegrado: set PartePrograma{
-	(Desenvolvimento + Testando)
-}
+fun naoIntegrado: set PartePrograma{ 	(Desenvolvimento + Testando)   }
 
-fun naoEntregue: set PartePrograma{
-	(Desenvolvimento + Testando)
-}
--- Se a parte estiver sendo desenvolvida por alguma equipe e 
-/*
-fact{
-	all p:PartePrograma |  #p.equipe = 1 <=> ( (p.equipe in Testadores <=> p in Testando) and (p.equipe in Desenvolvedores <=> p in Desenvolvimento))
+fun naoEntregue: set PartePrograma{	(Desenvolvimento + Testando)   }
 
 
-}*/
+-- Estados que as partes do programa podem estar.
 
---- Estados que as partes do programa podem estar 
-sig Desenvolvimento in PartePrograma{
-		equipe: one Desenvolvedores
-}
-sig Desenvolvido in PartePrograma{
-		equipe2: lone Testadores
-}
-sig Testando in PartePrograma{
-		equipe3: one Testadores}
-sig Testado in PartePrograma{
-		}
+/* Quando a parte do programa está em desenvolvimento, apenas a equipe de desenvolvedores pode ser relacionada a ela*/
+sig Desenvolvimento in PartePrograma{	equipe: one Desenvolvedores  }
+
+/* Quando a parte do programa está sendo testado, apenas a equipe de testadores pode ser relacionada a ela*/
+sig Desenvolvido in PartePrograma{}
+sig Testando in PartePrograma{   equipe3: one Testadores   }
+sig Testado in PartePrograma{}
 sig Integrado in PartePrograma{}
 sig Entregue in PartePrograma{}
 
