@@ -7,6 +7,7 @@ sig Desenvolvedores extends Equipe{}
 sig Testadores extends Equipe{}
 
 abstract sig PartePrograma{
+
 }
 
 sig Programa {
@@ -51,26 +52,78 @@ fun naoEntregue: set PartePrograma{	(Desenvolvimento + Testando)   }
 -- Estados que as partes do programa podem estar.
 
 /* Quando a parte do programa está em desenvolvimento, apenas a equipe de desenvolvedores pode ser relacionada a ela*/
-sig Desenvolvimento in PartePrograma{	equipe: one Desenvolvedores  }
+sig Desenvolvimento in PartePrograma{	equipeDesenvolvedora: one Desenvolvedores  }
 
-/* Quando a parte do programa está sendo testado, apenas a equipe de testadores pode ser relacionada a ela*/
+
 sig Desenvolvido in PartePrograma{}
-sig Testando in PartePrograma{   equipe3: one Testadores   }
+/* Quando a parte do programa está sendo testado, apenas a equipe de testadores pode ser relacionada a ela*/
+sig Testando in PartePrograma{   equipeTestadora: one Testadores   }
 sig Testado in PartePrograma{}
 sig Integrado in PartePrograma{}
 sig Entregue in PartePrograma{}
 
+/* Nenhuma parte esta no estado entregue */
 pred nehumaParteEntregue[p:PartePrograma]{
-	#p.equipe >= 1
+	 p not in Entregue
 }
 
+/* Pelo menos uma parte sendo testada */
 pred parteSendoTestada[p:Testando]{
 	some p
 }
 
-pred ProgramaCom3Partes[p:Programa]{
+/* O programa tem exatamente 3 partes */
+pred ProgramaQCom3Partes[p:Programa]{
 	 #p.partes = 3
 }
+
+assert ProgramaComNpartes{
+		all p:PartePrograma | one p.~partes
+}
+
+assert QuantidadeEquipe{
+		#Programa = 1
+		#Desenvolvedores = 2
+		#Testadores = 1
+}
+
+
+
+--- Testes
+
+
+assert ProgramaEmDesenvolvimento{
+		all p:PartePrograma | p in Desenvolvimento => (p not in (naoDesenvolvendo))
+}
+assert ProgramaEmTeste{
+		all p:PartePrograma | p in Testando => (p in Desenvolvido and  p not in (naoTestando))
+}
+assert ProgramaIntegrado{
+		all p:PartePrograma | p in Integrado => (p not in (naoIntegrado) and p in (desenvolvidoETestado))
+}
+assert ProgramaEntregue{
+		all p:PartePrograma | p in Entregue => (p not in(naoEntregue) and p in (prontoParaEntrega))
+}
+
+assert ParteSendoDesenvolvida {
+		all p:PartePrograma | p in Desenvolvimento => #(p.equipeDesenvolvedora) > 0
+}
+
+assert ParteSendoTestada {
+		all p:PartePrograma | p in Testando => #(p.equipeTestadora) > 0
+}
+
+check ProgramaEntregue
+check ProgramaIntegrado
+check ProgramaEmTeste
+check ProgramaEmDesenvolvimento
+check QuantidadeEquipe
+check ProgramaComNpartes
+check ParteSendoDesenvolvida
+check ParteSendoTestada
+
+
+
 
 pred show[]{
 }
